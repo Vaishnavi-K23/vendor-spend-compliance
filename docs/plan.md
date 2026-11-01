@@ -62,7 +62,23 @@ Finished in the last pass:
 - **DV ≠ maverick spend.** 2022+ DVs are $21.2B vs $10.8B on contracts, but the top payees are pension funds, Cook County / State treasurers, bond trustees, payroll pass-throughs and legal settlements. Phase 2 adds payee classification; Phase 3's off-contract KPI uses only the procurement-type remainder. "Raw DV share vs. true off-contract share" becomes a README finding.
 - **Day-level contract rules run on 2025-01-01 → as-of only** (paid after end date, duplicates, trailing-12-month spend).
 
-### Phase 2: Dimensional model
+### Phase 2: Dimensional model — done ✅
+
+Built in schema `dw` (`sql/02_functions.sql` … `sql/06_conformed.sql`, run by `python -m src.model.build_model`). Full documentation in `docs/data-model.md`. All model checks pass; payments reconcile to staging to the cent.
+
+What changed from the design below:
+- Payee type lives on `dim_vendor` (from `data/reference/payee_type_overrides.csv` + keyword rules), with group definitions in `data/reference/payee_types.csv`. No separate dim table.
+- Added `fact_payment_annual` (contract × year, through 2024) and `procurement_channel` on `dim_contract_type` (standard procurement / comptroller agreement / delegate agency grant). Sole-source and competition metrics run within standard procurement only, because procurement method is rarely recorded outside it.
+- `award_is_ceiling` sits on `dim_contract` (it depends on procurement type and description, not only contract type).
+
+**Findings:**
+- **True off-contract purchasing share ≈ 5%** (5.3% in 2025, 5.6% in 2026 YTD), against a raw DV share of ~66%. DVs are 74% obligations (pension, debt service, payroll pass-through, settlements), 17% transfers to other governments, 6.7% purchasing.
+- Award amounts on revisions are **changes**, not new totals; cumulative award = sum of revisions.
+- 734 vendors are registered under more than one vendor ID (1,513 IDs total).
+- 170 contracts paid in 2025+ ($1.0B, 9% of contract spend) have no end date in the data — extraction candidates for Phase 6.
+- **To review:** the `low`-confidence rows in `payee_type_overrides.csv`, mostly law firms classified as plaintiff vs. City counsel by billing pattern.
+
+Original design:
 
 | Table | Grain | Notes |
 |---|---|---|

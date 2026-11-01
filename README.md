@@ -36,13 +36,15 @@ _To be written from the marts._
 | --- | --- |
 | `src/ingest/` | download tables and a stratified PDF sample |
 | `src/load/` | land raw CSVs in Postgres, build staging |
+| `src/model/` | build the dimensional model (schema `dw`) |
 | `src/dq/` | run data-quality checks in `sql/tests/` |
 | `sql/` | staging, marts, tests |
 | `extract/` | LLM extraction and evaluation |
 | `powerbi/` | report file and page specs |
 | `reports/` | weekly exception pack |
 | `excel/` | reconciliation workbook |
-| `docs/` | data profile, KPI dictionary |
+| `data/reference/` | analyst-maintained lookups (payee types and overrides) |
+| `docs/` | data profile, data model, plan, KPI dictionary |
 
 ## Run it
 
@@ -55,6 +57,7 @@ copy .env.example .env
 python -m src.ingest.download_tables      # ~100 MB of CSVs into data/raw/
 python -m src.ingest.download_pdfs --n 200
 python -m src.load.load_raw               # raw.* and stg.*
+python -m src.model.build_model           # dw.* star schema
 python -m src.dq.run_checks
 ```
 

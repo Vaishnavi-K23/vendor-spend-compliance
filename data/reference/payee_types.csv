@@ -1,0 +1,18 @@
+payee_type,payee_group,is_procurement_like,description
+goods_services,Purchasing,true,goods and services bought from a vendor
+outside_counsel,Purchasing,true,law firms billing the City for legal services
+insurance_risk,Purchasing,true,"insurance brokers, insurers and claims administrators"
+pension,Obligations,false,pension and annuity funds
+payroll_passthrough,Obligations,false,"employee deductions passed on: credit unions, union dues, deferred comp, voluntary insurance"
+debt_financial,Obligations,false,banks and bond trustees (debt service)
+government,Transfers,false,other governments and public bodies
+internal,Transfers,false,City departments and accounts
+legal_settlement,Obligations,false,"settlements and judgments: plaintiff firms, court clerks, structured settlements"
+utility,Utilities,false,regulated utilities and energy suppliers
+real_estate,Other,false,title companies and property transactions
+concession,Other,false,concession agreements
+grant_civic,Other,false,civic organizations and memberships
+individual,Other,false,"payee name looks like a person: refunds and claims"
+legal_unclassified,Unclassified,,law firm whose side (plaintiff or City counsel) is unclear
+unclassified,Unclassified,,no rule matched
+contract,Contract,true,payment made under a contract (not a DV)

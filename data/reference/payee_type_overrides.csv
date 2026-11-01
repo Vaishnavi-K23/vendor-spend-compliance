@@ -1,0 +1,201 @@
+payee_key,payee_type,confidence,basis
+MUNICIPAL EMPLOYEE PENSION FD,pension,high,name
+POLICEMENS A & B FUND,pension,high,name
+FIREMENS ANNUITY BENEFIT FUND,pension,high,name
+MUNICIPAL EMPLOYEES ANNUITY AND BENEFIT FUND OF CHICAGO,pension,high,name
+LABORERS & RETIREMENT BOARD,pension,high,name
+LABORERS AND RETIREMENT BOARD EMPLOYEES ANNUITY BENEFIT FUND,pension,high,name
+NATIONWIDE RETIREMENT SOLUTION,payroll_passthrough,high,employee deferred compensation
+CHICAGO PATROLMEN S FCU,payroll_passthrough,high,credit union payroll deduction
+CHICAGO FIREMANS ASSN CREDIT,payroll_passthrough,high,credit union payroll deduction
+MUNICIPAL EMPLOY CREDIT UNION,payroll_passthrough,high,credit union payroll deduction
+MET LIFE,payroll_passthrough,medium,voluntary insurance payroll deduction; ~monthly pattern
+PRUDENTIAL INSUR AMER,payroll_passthrough,medium,voluntary insurance payroll deduction; ~monthly pattern
+COMBINED INSURANCE,payroll_passthrough,medium,voluntary insurance payroll deduction; ~monthly pattern
+AMERICAN FAMILY LIFE ASSURANCE OF COLUMBUS AFLAC,payroll_passthrough,medium,voluntary insurance payroll deduction
+NEW YORK LIFE INSURANCE,payroll_passthrough,low,name
+CONNECTYOURCARE,payroll_passthrough,medium,flexible spending account administrator
+FRATERNAL ORDER OF POLICE,payroll_passthrough,high,union dues
+CHICAGO FIRE FIGHTERS UNION,payroll_passthrough,high,union dues
+UNION LOCAL 1001,payroll_passthrough,high,union dues
+AFSCME COUNCIL 31,payroll_passthrough,high,union dues
+WATER PIPE EXT LOCAL 1092,payroll_passthrough,high,union dues
+TEAMSTERS LOCAL 700,payroll_passthrough,high,union dues
+CHICAGO POLICE SERGEANTS ASSOC,payroll_passthrough,high,union dues
+PLUMBERS WELFARE FUND LOCAL 130 U A,payroll_passthrough,high,union welfare fund
+LOCAL 150 OPERATING ENGINEERS,payroll_passthrough,high,union dues
+I B E W LOCAL 9,payroll_passthrough,high,union dues
+OPERATING ENGINEERS LOCAL 399,payroll_passthrough,high,union dues
+POLICE MEMORIAL FUND,payroll_passthrough,medium,payroll deduction; ~monthly pattern
+AMALGAMATED BANK OF CHICAGO,debt_financial,high,bank / bond trustee
+ZIONS BANK,debt_financial,high,bank / bond trustee
+BANK OF NEW YORK TRUST,debt_financial,high,bank / bond trustee
+U S BANK,debt_financial,high,bank / bond trustee
+BANK OF NY MIDWEST TRUST,debt_financial,high,bank / bond trustee
+U S BANK01 NATIONAL ASSOCIATION,debt_financial,high,bank / bond trustee
+US BANK NATIONAL ASSOC,debt_financial,high,bank / bond trustee
+PNC BANK,debt_financial,high,bank
+WELLS FARGO &,debt_financial,high,bank
+FIFTH THIRD BANK NATIONAL ASSOCIATION,debt_financial,high,bank
+BMO HARRIS BANK,debt_financial,high,bank
+COOK COUNTY TREASURER,government,high,other government
+STATE OF ILLINOIS TREASURER S OFFICE,government,high,other government
+CHICAGO TRANSITY AUTHORITY,government,high,other government
+PUBLIC BUILDING COMMISSION CHICAGO,government,high,other government
+COOK COUNTY COLLECTOR,government,high,other government
+METROPOLITAN WATER RECLAMATION OF GREATER CHICAGO,government,high,other government
+STATE OF ILL DEPARTMENT EMP SECURI,government,high,other government (unemployment insurance)
+BOARD OF EDUCATION OF CITY OF CHICAGO,government,high,other government
+CHICAGO PARK DISTRICT,government,high,other government
+ILLINOIS ENVIRONMENTAL PROTECTION AGENCY,government,high,other government
+DEPARTMENT OF TREASURY,government,high,federal government
+UNITED STATES POSTAL SERVICES,government,medium,federal (postage)
+UNITED STATES POSTAL SERVICE,government,medium,federal (postage)
+COOK COUNTY CONTROLLER,government,high,other government
+U S ARMY OF ENGINEERS,government,high,federal government
+GARY REGIONAL AIRPORT,government,medium,airport authority
+BOARD OF ELECTIONS COMMISSIONERS CITY OF CHICAGO,government,high,other government
+UNIVERSITY OF ILLINOIS,government,medium,public university
+COOK COUNTY CLERK,government,high,other government
+CITY COLLEGES OF CHICAGO,government,high,other government
+CHICAGO HOUSING AUTHORITY ENERGY DEPARTMENT,government,high,other government
+US CUSTOMS AND BORDER PROTECTION,government,high,federal government
+ILLINOIS DEPARTMENT OF COMMERCE & ECONOMIC OPPORTUNITY,government,high,state government
+POLICE TRAINING BOARD,government,medium,state board
+ILLINOIS WORKERS COMPENSATION COMMISSION,government,medium,state commission
+DEPARTMENT OF FINANCE,internal,high,city department
+DEPARTMENT OF AVIATION MIDWAY AIRPORT,internal,high,city department
+CITY OF CHICAGO DEPT OF WATER,internal,high,city department
+CITY TREASURER HARRIS BANK,internal,high,city treasurer account
+OFFICE OF INSPECTOR GENERAL,internal,high,city office
+LOEVY & LOEVY ATTORNEYS AT LAW,legal_settlement,high,plaintiff civil-rights firm
+BONJEAN LAW GROUP,legal_settlement,medium,few large payments
+SALVI SCHOSTOK & PRITCHARD,legal_settlement,medium,plaintiff injury firm; few large payments
+POWER ROGERS,legal_settlement,medium,plaintiff injury firm; few large payments
+KENNETH N FLAXMAN WILLIE ADAMS,legal_settlement,medium,plaintiff civil-rights firm
+MCNABOLA & ASSOCIATES,legal_settlement,medium,few large payments
+CHANEN & OLSTEIN,legal_settlement,medium,few large payments
+ACTION INJURY LAW GROUP,legal_settlement,medium,plaintiff injury firm
+CORBOY & DEMETRIO,legal_settlement,medium,plaintiff injury firm; few large payments
+LAW OFFICES OF JEFFREY J NESLUND,legal_settlement,medium,plaintiff civil-rights firm
+PEOPLE S LAW OFFICE,legal_settlement,medium,plaintiff civil-rights firm
+ROMANUCCI & BLANDIN,legal_settlement,medium,plaintiff injury firm
+ERICKSON & OPPENHEIMER,legal_settlement,low,single large payment
+GORDON GORDON & CENTRACCHIO,legal_settlement,low,few large payments
+COGAN & POWER,legal_settlement,low,single large payment
+MARKOFF LAW,legal_settlement,low,plaintiff firm
+MIDWEST INJURY LAWYERS,legal_settlement,medium,plaintiff injury firm
+COHEN MILSTEIN SELLERS & TOLL,legal_settlement,low,few large payments
+LEONARD LAW GROUP,legal_settlement,low,single large payment
+OPPENHEIMER FIRM,legal_settlement,low,few large payments
+GREGORY E KULIS&ASSOCIATES & ASSOCIATES,legal_settlement,low,plaintiff civil-rights firm
+HENDERSON PARKS,legal_settlement,low,plaintiff civil-rights firm
+RODERICK & SOLANGE MACARTHUR JUSTICE CENTER,legal_settlement,medium,plaintiff civil-rights organization
+DVORAK LAW OFFICES,legal_settlement,low,few large payments
+FOUTRIS LAW OFFICE,legal_settlement,low,few payments
+JAUREGUI & ASSOCIATES,legal_settlement,low,few large payments
+MOTLEY RICE,legal_settlement,low,few large payments
+CLERK U S DISTRICT COURT,legal_settlement,medium,court deposit / judgment
+CLERK OF CIRCUIT COURT,legal_settlement,medium,court deposit / judgment
+LIVINGSTON QUALIFIED SETTLEMENT FUND,legal_settlement,high,settlement fund
+ASSIGNED SETTLEMENT,legal_settlement,high,structured settlement
+USAA ANNUITY SERVICES,legal_settlement,medium,structured settlement annuity
+USAA LIFE INSURANCE,legal_settlement,low,single large payment; likely structured settlement
+ATHENE QUALIFIED ASSIGNMENT,legal_settlement,high,structured settlement
+METLIFE ASSIGNMENT,legal_settlement,high,structured settlement
+METLIFE TOWER RESOURCES GROUP,legal_settlement,medium,structured settlement
+PRUDENTIAL ASSIGNED SETTLEMENT SERVICES,legal_settlement,high,structured settlement
+BHG STRUCTURED SETTLEMENTS,legal_settlement,high,structured settlement
+TAFT STETTINIUS HOLLISTER CHICAGO,outside_counsel,medium,frequent billing pattern
+BORKAN & SCAHILL,outside_counsel,medium,city defense counsel; frequent billing
+SOTOS LAW FIRM,outside_counsel,medium,city defense counsel; frequent billing
+ROCK FUSCO & CONNELLY,outside_counsel,medium,city defense counsel; frequent billing
+HALE LAW,outside_counsel,medium,city defense counsel; frequent billing
+REITER BURNS,outside_counsel,medium,city defense counsel; frequent billing
+NATHAN KAMIONSKI,outside_counsel,medium,city defense counsel; frequent billing
+HELLER & FRISONE,outside_counsel,low,frequent billing pattern
+JONES DAY REAVIS & POGUE,outside_counsel,medium,frequent billing pattern
+ARENTFOX SCHIFF,outside_counsel,low,name
+RILEY SAFER HOLMES & CANCILA,outside_counsel,low,name
+THOMPSON COBURN,outside_counsel,medium,frequent billing pattern
+LANER MUCHIN DOMBROW BECKER,outside_counsel,medium,management-side labor firm; frequent billing
+NEAL & LEROY,outside_counsel,medium,frequent billing pattern
+GREENBERG TRAURIG,outside_counsel,medium,frequent billing pattern
+JOHNSON & BELL,outside_counsel,medium,defense firm; frequent billing
+FOX ROTHSCHILD,outside_counsel,medium,frequent billing pattern
+FRANCZEK RADELET,outside_counsel,medium,management-side labor firm; frequent billing
+JACKSON LEWIS CHICAGO,outside_counsel,medium,management-side employment firm; frequent billing
+COTSIRILOS TIGHE & STREICKER,outside_counsel,low,name
+ROBERTS & WEDDLE,outside_counsel,low,frequent billing pattern
+HINSHAW & CULBERTSON,outside_counsel,medium,defense firm; frequent billing
+MOHAN GROBLE SCOLARO,outside_counsel,low,frequent billing pattern
+MICHAEL BEST & FRIEDRICH,outside_counsel,medium,frequent billing pattern
+TRISTAN & CERVANTES,outside_counsel,low,frequent billing pattern
+SCHIFF HARDIN & WAITE,outside_counsel,low,name
+VENABLE,outside_counsel,low,name
+KULWIN MASCIOPINTO & KULWIN,outside_counsel,low,frequent billing pattern
+GOLDMAN & GRANT,outside_counsel,low,frequent billing pattern
+TALAN & KTSANES,outside_counsel,low,frequent billing pattern
+ARNOLD SCOTT HARRIS,outside_counsel,low,debt-collection law firm; frequent billing
+LINE BARGER GOGGAN BLAIR & SAMPSON,outside_counsel,low,debt-collection law firm
+HAMILTON & HENNESSY,legal_unclassified,low,pattern ambiguous
+MIROBALLI DURKIN & RUDIN,legal_unclassified,low,pattern ambiguous
+USI INSURANCE SERVICES,insurance_risk,high,insurance broker
+ARTHUR J GALLAGHER RISK MANAGEMENT SERVICES,insurance_risk,high,insurance broker
+ALLIANT INSURANCE SERVICES,insurance_risk,high,insurance broker
+CCMSI,insurance_risk,high,claims administrator
+ZURICH AMERICAN INSURANCE,insurance_risk,high,insurer
+COMED EXELON ENERGY DELIVERY,utility,high,regulated utility
+COMMONWEALTH EDISON,utility,high,regulated utility
+PEOPLES GAS,utility,high,regulated utility
+CONSTELLATION ENERGY SERVICES,utility,medium,energy supplier
+MANSFIELD POWER & GAS,utility,medium,energy supplier
+GREATER ILLINOIS TITLE,real_estate,high,title company
+CHICAGO TITLE & TRUST,real_estate,high,title company
+PANGEA VENTURES,real_estate,low,landlord pattern
+CHICAGO PARKING METERS,concession,high,parking meter concession
+CHICAGO CONVENTION & TOURISM BUREAU,grant_civic,high,civic organization
+WORLD BUSINESS CHICAGO,grant_civic,high,civic organization
+WATER RESEARCH FOUNDATION,grant_civic,medium,research membership
+ERNST & YOUNG,goods_services,high,professional services
+UNITED MAINTENANCE,goods_services,high,janitorial services
+USALCO,goods_services,high,water treatment chemicals
+OVERDRIVE,goods_services,high,library e-books
+INGRAM LIBRARY SERVICES,goods_services,high,library books
+PROQUEST,goods_services,high,library databases
+BADGER METER,goods_services,high,water meters
+ABM INDUSTRY GROUPS,goods_services,high,facility services
+CASCADE ENGINEERING,goods_services,high,refuse carts
+SCHINDLER ELEVATOR,goods_services,high,elevator maintenance
+AT&T,goods_services,high,telecom
+VERIZON WIRELESS,goods_services,high,telecom
+SEBIS DIRECT,goods_services,medium,printing / mailing
+FAVORITE HEALTHCARE STAFFING,goods_services,high,staffing
+INDUSTRIAL FENCE,goods_services,high,construction
+SEVEN D CONSTRUCTION,goods_services,high,construction
+KAIZEN HEALTH,goods_services,medium,medical transport services
+ALDRIDGE ELECTRIC,goods_services,high,construction
+PENCCO,goods_services,high,water treatment chemicals
+RASIER UBER,goods_services,medium,ride services
+PAN OCEANIC ENGINEERING,goods_services,high,engineering
+FEDERAL EXPRESS,goods_services,high,shipping
+SPEEDY GONZALEZ LANDSCAPING,goods_services,high,landscaping
+INTERSECTION MEDIA,goods_services,medium,advertising
+AMS AUTO,goods_services,medium,auto parts / services
+KENTECH CONSULTING,goods_services,high,consulting
+A & D PROPERTY SERVICES,goods_services,medium,property services
+REHRIG PACIFIC,goods_services,high,refuse carts
+CDW GOVERNMENT,goods_services,high,IT equipment
+DAYSPRING PROFESSIONAL JANITOR AEROFUND FINANCIAL,goods_services,medium,janitorial (factored)
+LIBERTY VOTE USA,goods_services,medium,election services
+PALM ELECTRIC,goods_services,high,construction
+ALLAN INTEGRATED CONTROL SYSTEMS,goods_services,high,controls / construction
+NORTHWESTERN UNIVERSITY,goods_services,low,research / services agreement
+DELAWARE CARS T R HARMSEN J V,goods_services,low,single large payment
+SUMIT CONSTRUCTION,goods_services,high,construction
+BLOOMBERG FINANCE LP,goods_services,high,data subscription
+TEACHSTONE,goods_services,high,training
+TEACHING STRATEGIES,goods_services,high,curriculum
+CITY UTILITY EQUIPMENT SALES & LEASING,goods_services,high,equipment
+T & N CHICAGO,unclassified,low,unknown payee
+GH CHICAGO IL,unclassified,low,unknown payee
