@@ -72,7 +72,7 @@ What changed from the design below:
 - `award_is_ceiling` sits on `dim_contract` (it depends on procurement type and description, not only contract type).
 
 **Findings:**
-- **True off-contract purchasing share ≈ 5%** (5.3% in 2025, 5.6% in 2026 YTD), against a raw DV share of 46% (2025). DVs are 74% obligations (pension, debt service, payroll pass-through, settlements), 17% transfers to other governments, 6.7% purchasing.
+- **True off-contract purchasing share ≈ 5%** (5.3% in 2025, 5.6% in 2026 YTD), against a raw DV share of 46% (2025). DVs are 74% obligations (pension, debt service, payroll pass-through, settlements), 17% transfers to other governments, 6.7% purchasing. *Revised in Phase 4, when insurance moved out of purchasing: 4.1% / 4.4%, with purchasing at 5.1% of DVs.*
 - Award amounts on revisions are **changes**, not new totals; cumulative award = sum of revisions.
 - 734 vendors are registered under more than one vendor ID (1,513 IDs total).
 - 170 contracts paid in 2025+ ($1.0B, 9% of contract spend) have no end date in the data — extraction candidates for Phase 6.
@@ -97,9 +97,9 @@ Original design:
 
 Built as plain SQL (`sql/07_mart_payments.sql`, `08_mart_contracts.sql`, `09_mart_kpis.sql`), run by `python -m src.model.build_model`. dbt was deferred: it would add a second tool for one layer, and the SQL can move into dbt models later without changing any logic. Formulas, values and caveats are in `docs/kpi-dictionary.md`. Mart checks pass; contract-level spend reconciles to payments, apart from $95.9M paid against contract numbers missing from the contracts table, which is documented.
 
-Headline values (2025):
-- off-contract purchasing **5.3%** ($318M), of which $80M went to vendors that held a contract in force
-- exceptions **$469M**: possible duplicates $25M, paid after end date $38M, over award $88M, off-contract $318M
+Headline values (2025), after the Phase 4 rule revisions:
+- off-contract purchasing **4.1%** ($247M), of which $41M went to vendors that held a contract in force
+- exceptions **$385M**: possible duplicates $19.5M (160 payments), paid after end date $30.4M (62 contracts), over award $88.1M (111 contracts), off-contract $247M
 - **83** standard-procurement contracts expire within 90 days with **$269M** of spend in the last 12 months
 - sole source 2.3% of standard procurement; top-10 vendors 30% of purchasing
 
@@ -142,7 +142,7 @@ SQL to be able to walk through live:
 ### Phase 3b: Statistics notebook (Python) — done ✅
 
 `notebooks/analysis.ipynb`, executed with outputs and 3 charts. Results:
-1. **Off-contract timing** (the department question was replaced, because DVs have no department). No December spike. January–February is higher by dollars (7.6% vs 5.0%) but *lower* by payment count (odds ratio 0.80). The rise is annual **insurance renewals**: 49% of off-contract insurance dollars fall in Jan–Feb, against 19% expected. Excluding insurance: 4.9% vs 4.3%. Contracts lapsing at Dec 31 explain little (OR 1.23).
+1. **Off-contract timing** (the department question was replaced, because DVs have no department). No December spike. The first run showed a Jan–Feb rise by dollars (7.6% vs 5.0%), traced to annual **insurance renewals** (49% of insurance DV dollars fall in Jan–Feb, against 19% expected). After Phase 4 reclassified insurance as premium pass-through: Jan–Feb 4.8% vs 4.2%, slightly *lower* by count (OR 0.81). There's a small renewal-gap effect: early-year off-contract dollars go to vendors whose contract just ended at 6.8% vs 4.1% (OR 1.22).
 2. **Contract growth by method.** RFP contracts grow more often than bid contracts (55% vs 35%; median 1.16× vs 1.00×; Mann-Whitney p ≈ 1e-6, rank-biserial r = 0.24). Sole source vs competitive: no difference (p = 0.38).
 3. **Expiry exposure.** 83 standard-procurement contracts ending within 90 days run **$126M per 6 months**. The top 10 hold 68% of it, and 41 have rising spend.
 
@@ -155,11 +155,29 @@ One notebook (`notebooks/analysis.ipynb`, pandas + scipy/statsmodels):
 
 Results are stated in plain language in the README, with caveats (observational data, not causal).
 
-### Phase 4: Validate the exception rules (no planted answers, so check by hand) — set up, review in progress
+### Phase 4: Validate the exception rules (no planted answers, so check by hand) — first pass done ✅, your confirmation pending
 
-Built: `validation/review_workbook.xlsx` (7 sheets, 245 rows with evidence pre-filled), `python -m src.validation.score_review` (precision and miss rate with 95% Wilson intervals → `validation/results.md`), and the how-to in `validation/README.md`. Samples are deterministic.
+Built: `validation/review_workbook.xlsx` (7 sheets, 245 rows with evidence pre-filled), `python -m src.validation.score_review` (precision and miss rate with 95% Wilson intervals, dollar-weighted precision, and precision of the current rules on the same rows → `validation/results.md`), and the how-to in `validation/README.md`.
 
-**Your part:** fill in verdict / reason / notes. The verdicts must be your own judgment, because this is the interview story. Priority order: `off_contract_top_payees` (insurance brokers), `duplicates`, `over_award` (grants paid beyond award), `paid_after_end`. Then rescore, adjust rules where precision is low, and record the changes.
+**First pass by Claude** (every row has `reviewer = Claude (first pass)`). Evidence used: payment patterns, voucher prefixes, successor contracts, and the latest revision PDF for all 70 contract-rule rows (read page 1; scanned PDFs noted). Results before → after the rule revisions:
+
+| Rule | Before | After |
+| --- | --- | --- |
+| Possible duplicate | 7% | 50% (wide interval; a screening list only, since public data has no invoice numbers) |
+| Paid after end date | 14% | 75% |
+| Over award | 77% | 100% |
+| Off-contract | 83% (top payees 52% by $) | 88% (top payees 100%) |
+| Missed duplicates / after end | 0% miss rate | — |
+
+Main changes: insurance reclassified as premium pass-through; `PVPR`/`PVRF` voucher and condo rules; duplicate floor and exclusions; 180-day grace for grants plus a sustained-billing test; 5% over-award materiality. Full list in `docs/kpi-dictionary.md`.
+
+Findings worth a README line:
+- readable PDFs confirmed the data's end dates in every case
+- the portal truncates award cents
+- Seven D Construction has two contracts with identical $8,449,025 awards, each paid about $10.5M (possible duplicate contract record)
+- outside counsel are 27% of off-contract dollars, likely under Law Department engagement letters
+
+**Your part:** spot-check the verdicts (at least `off_contract_top_payees`, `over_award` and the `unclear` rows), change any you disagree with, put your name in `reviewer`, and rerun the scorer. In interviews, describe it as an AI-assisted first pass that you checked.
 
 - For each rule, hand-review a random 30–50 flagged payments and record precision ("41 of 50 were real issues; the 9 false positives were…").
 - Review a sample of unflagged payments too, to estimate what the rules miss.

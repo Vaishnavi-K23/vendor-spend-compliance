@@ -1,9 +1,9 @@
 payee_type,payee_group,is_procurement_like,description
 goods_services,Purchasing,true,goods and services bought from a vendor
 outside_counsel,Purchasing,true,law firms billing the City for legal services
-insurance_risk,Purchasing,true,"insurance brokers, insurers and claims administrators"
+insurance_risk,Obligations,false,"insurance premiums and claims funding paid through brokers, insurers and claims administrators (Phase 4: premium pass-through pattern)"
 pension,Obligations,false,pension and annuity funds
-payroll_passthrough,Obligations,false,"employee deductions passed on: credit unions, union dues, deferred comp, voluntary insurance"
+payroll_passthrough,Obligations,false,"employee deductions passed on: credit unions, union dues, deferred comp, voluntary insurance, charitable deductions"
 debt_financial,Obligations,false,banks and bond trustees (debt service)
 government,Transfers,false,other governments and public bodies
 internal,Transfers,false,City departments and accounts
@@ -12,7 +12,9 @@ utility,Utilities,false,regulated utilities and energy suppliers
 real_estate,Other,false,title companies and property transactions
 concession,Other,false,concession agreements
 grant_civic,Other,false,civic organizations and memberships
-individual,Other,false,"payee name looks like a person: refunds and claims"
+refund_rebate,Other,false,"refunds (PVRF vouchers) and condo refuse rebates"
+individual,Other,false,"payee name looks like a person, paid a few times: refunds and claims"
+individual_recurring,Unclassified,,"person paid repeatedly: independent contractor or stipend/assistance, not determinable"
 legal_unclassified,Unclassified,,law firm whose side (plaintiff or City counsel) is unclear
 unclassified,Unclassified,,no rule matched
 contract,Contract,true,payment made under a contract (not a DV)

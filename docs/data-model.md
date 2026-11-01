@@ -56,29 +56,49 @@ Procurement method (bid, RFP, sole source…) is recorded almost only for standa
 Every payee gets a `payee_type` (definitions in `data/reference/payee_types.csv`):
 
 1. **Analyst overrides** (`data/reference/payee_type_overrides.csv`): the top 200 DV payees by dollars (96% of DV $), each with a confidence level and basis. Law firms are split by billing pattern: City counsel bill hundreds of times (`outside_counsel`, purchasing); plaintiff firms receive a few large payments (`legal_settlement`). **Review the `low` confidence rows.**
-2. **Keyword rules** for the long tail, in order: internal → pension → payroll pass-through (credit unions, unions) → legal settlement → government → law firm (side unknown) → bank → utility → registered City vendor → business suffix → person-like name with ≤5 payments (`individual`) → any other payee paid more than 5 times (`goods_services`) → `unclassified`.
+2. **Keyword and voucher rules** for the long tail, in order:
+   1. internal
+   2. pension
+   3. payroll pass-through (credit unions, unions)
+   4. **payroll vouchers**: the payee is mostly paid on `PVPR` vouchers → payroll pass-through
+   5. **refunds and rebates**: mostly `PVRF` vouchers, or a condo/association name → `refund_rebate`
+   6. legal settlement
+   7. government
+   8. law firm (side unknown)
+   9. bank
+   10. utility
+   11. registered City vendor
+   12. business suffix
+   13. person-like name with ≤5 payments → `individual`
+   14. **person paid repeatedly** ("LAST, FIRST" or "FIRST M. LAST") → `individual_recurring` (unclassified)
+   15. any other payee paid more than 5 times → `goods_services`
+   16. `unclassified`
+
+   Steps 4, 5 and 14 were added after the Phase 4 review.
+
+**Insurance** (`insurance_risk`) is not purchasing. In the Phase 4 review, broker payments followed a premium pass-through pattern (USI: 87% of dollars in $1M+ payments, 76% in Dec–Feb, the same amounts each year).
 
 Result for DVs 2022–2026 ($21.2B):
 
 | Payee group | $ | Share |
 | --- | --- | --- |
-| Obligations (pension, debt service, payroll pass-through, settlements) | $15.6B | 73.9% |
+| Obligations (pension, debt service, payroll pass-through, settlements, insurance) | $15.9B | 75.3% |
 | Transfers (other governments, internal) | $3.6B | 17.1% |
-| **Purchasing** (goods & services, outside counsel, insurance) | **$1.4B** | **6.7%** |
-| Other (individual refunds/claims, real estate, concessions, civic) | $0.3B | 1.2% |
-| Unclassified | $0.1B | 0.6% |
+| **Purchasing** (goods & services, outside counsel) | **$1.09B** | **5.1%** |
+| Other (refunds and rebates, individual claims, real estate, concessions, civic) | $0.3B | 1.3% |
+| Unclassified (incl. people paid repeatedly, law firms of unknown side) | $0.16B | 0.7% |
 | Utilities | $0.1B | 0.5% |
 
-**Off-contract purchasing share** (purchasing-type DV $ ÷ all purchasing $):
+**Off-contract purchasing share** (purchasing-type DV $ ÷ all purchasing $), from `dw.kpi_summary`:
 
-| Year | Purchasing DVs | Contract payments | Off-contract share |
+| Year | Off-contract purchasing | All purchasing | Off-contract share |
 | --- | --- | --- | --- |
-| 2025 | $318M | $5,718M | 5.3% |
-| 2026 (to Oct 29) | $303M | $5,085M | 5.6% |
+| 2025 | $247.0M | $5,965.0M | 4.1% |
+| 2026 (to Oct 29) | $231.4M | $5,316.2M | 4.4% |
 
-The raw DV share of all payments is 46.4% in 2025 and 42.3% in 2026 YTD; the true off-contract purchasing share is ~5%. (An earlier figure of ~66% compared 2022–2026 DVs with *itemized* contract payments only, missing the 2022–2024 contract payments that exist only as annual totals.)
+The raw DV share of all payments is 46.4% in 2025 and 42.3% in 2026 YTD; the true off-contract purchasing share is about 4%. (Two earlier figures were wrong. A raw share of ~66% compared DVs with *itemized* contract payments only, missing the 2022–2024 contract payments that exist only as annual totals. An off-contract share of 5.3% counted insurance premiums as purchasing.)
 
-Known error sources, measured in Phase 4: small businesses without a legal suffix and paid ≤5 times land in `individual`; law partnerships named "X & Y" without an override land in `unclassified`.
+Known error sources (Phase 4): small businesses without a legal suffix and paid ≤5 times land in `individual`; people with two-word names paid repeatedly still land in `goods_services`; law partnerships named "X & Y" without an override land in `unclassified`.
 
 ## Checks
 

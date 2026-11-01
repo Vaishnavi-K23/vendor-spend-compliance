@@ -18,12 +18,42 @@ p as (
            c.current_end_date,
            c.cumulative_award,
            c.award_is_ceiling,
-           c.has_complete_revision_history
+           c.has_complete_revision_history,
+           -- Grants close out slowly: final reimbursements routinely arrive 3-6 months
+           -- after the period ends (Phase 4), so they get a longer grace period.
+           case when ct.procurement_channel = 'Delegate agency (grant)' then 180 else 90 end
+                              as grace_days
     from dw.fact_payment f
     join ref.payee_types t using (payee_type)
     left join dw.dim_contract c using (contract_number)
+    left join dw.dim_contract_type ct on ct.contract_type = c.contract_type
     where t.is_procurement_like
       and (f.is_direct_voucher or f.payment_date >= date '2025-01-01')
+),
+-- Paid after end date only counts when billing is sustained: payments in 2+ distinct
+-- months past the grace period. A single late or closeout batch is normal (Phase 4).
+sustained_after_end as (
+    select contract_number
+    from p
+    where payment_date > current_end_date + grace_days
+    group by contract_number
+    having count(distinct date_trunc('month', payment_date)) >= 2
+),
+-- High-volume billers (30+ payments a month) issue many same-amount invoices
+-- (rentals, fuel, telecom accounts), which swamp the duplicate rule.
+payee_volume as (
+    select payee_key,
+           count(*)::numeric / count(distinct date_trunc('month', payment_date)) as payments_per_month
+    from dw.fact_payment
+    group by payee_key
+),
+-- Contract total, for the over-award materiality gate.
+contract_total as (
+    select contract_number, sum(amount) as total_paid
+    from (select contract_number, amount from dw.fact_payment where contract_number is not null
+          union all
+          select contract_number, amount from dw.fact_payment_annual) x
+    group by contract_number
 ),
 -- Running paid-to-date per contract: annual totals (through 2024) are the opening
 -- balance, then itemized payments accumulate in date order.
@@ -49,18 +79,24 @@ running as (
       and not exists (select 1 from opening o where o.contract_number = p.contract_number)
 ),
 -- Possible duplicate: the later of two positive payments to the same payee for the
--- same amount, on different vouchers, within 7 days. A payee/amount pair seen 4+
--- times is a recurring rate or installment (rentals, fuel, fixed fees), not a duplicate.
+-- same amount, on different vouchers, within 7 days. Excluded (Phase 4 review):
+--   payee/amount pairs seen 4+ times (recurring rates, installments)
+--   amounts under $1,000 (noise, immaterial)
+--   grant reimbursement vouchers (CVIP): agencies bill equal program amounts
+--   high-volume billers (30+ payments a month)
 dup_candidates as (
     select payment_id, payee_key, amount, payment_date
     from (
-        select payment_id, payee_key, amount, payment_date, voucher_number,
-               lag(payment_date)   over w as prev_date,
-               lag(voucher_number) over w as prev_voucher,
-               count(*) over (partition by payee_key, amount) as times_amount_paid
+        select p.payment_id, p.payee_key, p.amount, p.payment_date, p.voucher_number,
+               lag(p.payment_date)   over w as prev_date,
+               lag(p.voucher_number) over w as prev_voucher,
+               count(*) over (partition by p.payee_key, p.amount) as times_amount_paid
         from p
-        where amount > 0
-        window w as (partition by payee_key, amount order by payment_date, payment_id)
+        join payee_volume v using (payee_key)
+        where p.amount >= 1000
+          and p.voucher_number not like 'CVIP%'
+          and v.payments_per_month < 30
+        window w as (partition by p.payee_key, p.amount order by p.payment_date, p.payment_id)
     ) x
     where prev_date >= payment_date - 7
       and prev_voucher <> voucher_number
@@ -103,19 +139,27 @@ flagged as (
         p.current_end_date,
         case when p.payment_date > p.current_end_date
              then p.payment_date - p.current_end_date end             as days_after_end,
-        -- 90-day grace for invoice lag after the term ends
-        coalesce(p.payment_date > p.current_end_date + 90, false)     as is_paid_after_end,
+        -- Past the grace period (90 days; 180 for grants) on a contract with sustained
+        -- billing after the term
+        coalesce(p.payment_date > p.current_end_date + p.grace_days, false)
+            and s.contract_number is not null                         as is_paid_after_end,
         r.paid_to_date_running,
         p.cumulative_award,
         p.award_is_ceiling,
         p.has_complete_revision_history,
-        -- Only the part of a payment that crosses the award line counts.
+        -- Only the part of a payment that crosses the award line counts, and only on
+        -- contracts that end up materially over: > 5% and > $1 past the award. The
+        -- portal truncates award cents, and 1-4% overages are closeout adjustments.
         case when p.amount > 0 and p.cumulative_award > 0
+                  and ct.total_paid > p.cumulative_award * 1.05
+                  and ct.total_paid - p.cumulative_award > 1
              then greatest(0, least(p.amount, r.paid_to_date_running - p.cumulative_award))
              else 0 end                                               as amount_past_award
     from p
     left join running r using (payment_id)
     left join dups d using (payment_id)
+    left join sustained_after_end s using (contract_number)
+    left join contract_total ct using (contract_number)
 )
 -- Past-award dollars are only an exception when the award is a ceiling AND the
 -- revision history is complete; with missing revisions the award is likely

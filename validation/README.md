@@ -1,5 +1,7 @@
 # Phase 4: hand validation
 
+> **Status:** every row has a first-pass verdict by Claude (`reviewer = Claude (first pass)`), based on payment patterns, voucher prefixes, successor contracts and the latest revision PDFs. Confirm or change the verdicts, put your name in `reviewer`, and rerun the scorer. Results are in `results.md`, and the rule changes they led to are in `docs/kpi-dictionary.md`.
+
 The exception rules have no answer key, so their precision is measured by reviewing random samples by hand. The miss rate is estimated from samples the rules did **not** flag.
 
 ## Files

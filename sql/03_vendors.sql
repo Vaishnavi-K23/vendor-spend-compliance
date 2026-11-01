@@ -23,7 +23,11 @@ select
     coalesce(dw.norm_name(vendor_name), '(BLANK)') as vendor_key,
     max(vendor_name)                                as sample_name,
     count(*)                                        as n_payments,
-    sum(amount)                                     as total_amount
+    sum(amount)                                     as total_amount,
+    -- Voucher prefixes mark the payment stream (Phase 4 review): PVPR = payroll
+    -- remittances, PVRF = refunds.
+    avg((voucher_number like 'PVPR%')::int)         as share_payroll_vouchers,
+    avg((voucher_number like 'PVRF%')::int)         as share_refund_vouchers
 from stg.payments
 group by 1;
 
@@ -62,6 +66,11 @@ classified as (
                 then 'pension'
             when k.vendor_key ~ '\y(CREDIT UNION|FCU|LOCAL [0-9]+|AFSCME|TEAMSTERS|FRATERNAL ORDER|UNION|BROTHERHOOD|MACHINISTS)\y'
                 then 'payroll_passthrough'
+            when p.share_payroll_vouchers >= 0.5
+                then 'payroll_passthrough'     -- e.g. employee charitable deductions
+            when p.share_refund_vouchers >= 0.5
+                or k.vendor_key ~ '\y(CONDO|CONDOS|CONDOMINIUM|CONDOMINIUMS|ASSN|HOMEOWNERS|TOWNHOMES)\y'
+                then 'refund_rebate'           -- refunds; condo refuse rebates
             when k.vendor_key ~ '\y(SETTLEMENT|QUALIFIED ASSIGNMENT|STRUCTURED|QSF|ESTATE OF)\y'
                 then 'legal_settlement'
             when k.vendor_key ~ '\y(COUNTY|STATE OF|ILLINOIS DEPARTMENT|UNITED STATES|U S DEPARTMENT|TREASURER|CLERK|DISTRICT|AUTHORITY|COMMISSION|BOARD OF|VILLAGE OF|CITY OF)\y'
@@ -84,6 +93,10 @@ classified as (
                  and array_length(regexp_split_to_array(k.vendor_key, ' '), 1) between 2 and 4
                  and p.n_payments <= 5
                 then 'individual'
+            -- A person paid repeatedly ("LAST, FIRST" or "FIRST M. LAST") could be an
+            -- independent contractor or a stipend/assistance recipient; the data can't tell.
+            when p.sample_name ~ '^[A-Z''-]+, [A-Z]' or p.sample_name ~ '^[A-Z]+ [A-Z]\.? [A-Z''-]+$'
+                then 'individual_recurring'
             when p.n_payments > 5
                 then 'goods_services'
             else 'unclassified'
