@@ -216,5 +216,5 @@ If time slips, cut in this order: CUAD run, 7B-vs-3B comparison, dbt (use plain 
 ## 7. Decisions
 
 - **LLM provider:** local Qwen 2.5 7B via Ollama, $0. ✅
-- **Power BI Desktop:** confirm it's installed (Windows 11 Home is fine).
-- **GitHub:** repo goes public after the Phase 1 commit.
+- **Power BI Desktop:** installed. ✅
+- **GitHub:** public repo under Vaishnavi-K23, commits under your name only. ✅
