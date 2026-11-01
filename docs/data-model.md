@@ -76,7 +76,7 @@ Result for DVs 2022–2026 ($21.2B):
 | 2025 | $318M | $5,718M | 5.3% |
 | 2026 (to Oct 29) | $303M | $5,085M | 5.6% |
 
-The raw DV share of 2022+ payments is ~66%; the true off-contract purchasing share is ~5%.
+The raw DV share of all payments is 46.4% in 2025 and 42.3% in 2026 YTD; the true off-contract purchasing share is ~5%. (An earlier figure of ~66% compared 2022–2026 DVs with *itemized* contract payments only, missing the 2022–2024 contract payments that exist only as annual totals.)
 
 Known error sources, measured in Phase 4: small businesses without a legal suffix and paid ≤5 times land in `individual`; law partnerships named "X & Y" without an override land in `unclassified`.
 

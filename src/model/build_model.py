@@ -1,16 +1,19 @@
-"""Build the dimensional model (schema dw) from staging.
+"""Build the dimensional model and KPI marts (schema dw) from staging.
 
-Loads the reference CSVs in data/reference into schema ref, then runs the
-model SQL files in order. Requires stg.* (python -m src.load.load_raw).
+Loads the reference CSVs in data/reference and the snapshot date into schema
+ref, then runs the model and mart SQL files in order. Requires stg.*
+(python -m src.load.load_raw).
 
 Usage: python -m src.model.build_model
 """
+import json
 import time
 
-from src.config import ROOT, SQL_DIR
+from src.config import MANIFEST_DIR, ROOT, SQL_DIR
 from src.db import connect, run_sql_file
 
 REFERENCE_DIR = ROOT / "data" / "reference"
+DOWNLOAD_MANIFEST = MANIFEST_DIR / "download_manifest.json"
 
 REFERENCE_TABLES = {
     "payee_types": """
@@ -31,6 +34,9 @@ MODEL_FILES = [
     "04_contracts.sql",
     "05_payments.sql",
     "06_conformed.sql",
+    "07_mart_payments.sql",
+    "08_mart_contracts.sql",
+    "09_mart_kpis.sql",
 ]
 
 
@@ -49,6 +55,12 @@ def load_reference(conn) -> None:
                           where payee_type not in (select payee_type from ref.payee_types)""").fetchall()
     if bad:
         raise ValueError(f"overrides with unknown payee_type: {bad}")
+
+    # KPIs are computed against the snapshot date, not today, so findings don't drift.
+    as_of = json.loads(DOWNLOAD_MANIFEST.read_text())["as_of_date"]
+    conn.execute("drop table if exists ref.run_params")
+    conn.execute("create table ref.run_params as select %s::date as as_of_date", (as_of,))
+    print(f"ref.run_params: as_of_date {as_of}")
     conn.commit()
 
 

@@ -72,7 +72,7 @@ What changed from the design below:
 - `award_is_ceiling` sits on `dim_contract` (it depends on procurement type and description, not only contract type).
 
 **Findings:**
-- **True off-contract purchasing share ≈ 5%** (5.3% in 2025, 5.6% in 2026 YTD), against a raw DV share of ~66%. DVs are 74% obligations (pension, debt service, payroll pass-through, settlements), 17% transfers to other governments, 6.7% purchasing.
+- **True off-contract purchasing share ≈ 5%** (5.3% in 2025, 5.6% in 2026 YTD), against a raw DV share of 46% (2025). DVs are 74% obligations (pension, debt service, payroll pass-through, settlements), 17% transfers to other governments, 6.7% purchasing.
 - Award amounts on revisions are **changes**, not new totals; cumulative award = sum of revisions.
 - 734 vendors are registered under more than one vendor ID (1,513 IDs total).
 - 170 contracts paid in 2025+ ($1.0B, 9% of contract spend) have no end date in the data — extraction candidates for Phase 6.
@@ -93,7 +93,26 @@ Original design:
 
 ### Phase 3: SQL marts and KPIs
 
-Each KPI gets a formula in `docs/kpi-dictionary.md`:
+#### Status: done ✅
+
+Built as plain SQL (`sql/07_mart_payments.sql`, `08_mart_contracts.sql`, `09_mart_kpis.sql`), run by `python -m src.model.build_model`. dbt was deferred: it would add a second tool for one layer, and the SQL can move into dbt models later without changing any logic. Formulas, values and caveats are in `docs/kpi-dictionary.md`. Mart checks pass; contract-level spend reconciles to payments, apart from $95.9M paid against contract numbers missing from the contracts table, which is documented.
+
+Headline values (2025):
+- off-contract purchasing **5.3%** ($318M), of which $80M went to vendors that held a contract in force
+- exceptions **$469M**: possible duplicates $25M, paid after end date $38M, over award $88M, off-contract $318M
+- **83** standard-procurement contracts expire within 90 days with **$269M** of spend in the last 12 months
+- sole source 2.3% of standard procurement; top-10 vendors 30% of purchasing
+
+Changes from the design, found while checking the first results:
+- **Raw DV share is 46% (2025), not ~66%.** The earlier figure compared against itemized contract payments only.
+- **Possible duplicates** now exclude payee/amount pairs seen 4+ times (recurring rates, rentals, fixed fees) and void-and-reissue reversals. This cut flags from 4,962 to 1,007 in 2025. Same-voucher identical lines (6,754) are reported but not flagged.
+- **Over award** counts only when the revision history is complete. Contracts with missing revision numbers ($171M in 2025) are reported as `over_award_incomplete_history`, a data-quality measure: their published award is likely understated.
+- **Expiry risk** is headlined for standard procurement only. 974 grants and comptroller agreements expiring within 90 days are annual Dec 31 cycles.
+- Department HHI is only meaningful at ≥ $50M spend.
+
+For Phase 4 to check first: insurance brokers in off-contract spend (premium pass-throughs?), grants paid beyond award (missing funding amendments?), and the precision of the 1,007 duplicate flags.
+
+Original design:
 
 | KPI | Definition |
 |---|---|

@@ -34,6 +34,7 @@ create unique index on dw.fact_payment (payment_id);
 create index on dw.fact_payment (contract_number);
 create index on dw.fact_payment (vendor_key);
 create index on dw.fact_payment (payment_date);
+create index on dw.fact_payment (payee_key, amount);
 
 drop table if exists dw.fact_payment_annual cascade;
 create table dw.fact_payment_annual as

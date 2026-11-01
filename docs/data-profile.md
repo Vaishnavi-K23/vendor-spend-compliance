@@ -26,7 +26,7 @@ Consequences:
 
 ## Direct vouchers are mostly not procurement
 
-`contract_number = 'DV'` means paid without a contract. In 2022–2026 DVs are **$21.2B vs $10.8B** in contract payments (≈66% of dollars). But the largest DV payees are:
+`contract_number = 'DV'` means paid without a contract. In 2022–2026 DVs total **$21.2B**. Comparing like with like, in years where both are itemized, DVs are 46.4% of all payments in 2025 and 42.3% in 2026 YTD. But the largest DV payees are:
 
 | Payee type | Examples (2022+ DV $) |
 | --- | --- |

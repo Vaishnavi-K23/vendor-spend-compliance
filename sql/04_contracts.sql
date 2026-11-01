@@ -117,6 +117,9 @@ agg as (
         count(*) filter (where revision_type in ('increase', 'decrease')) as amount_change_count,
         count(*) filter (where extends_term)                           as extension_count,
         bool_or(revision_type = 'original')                            as has_original,
+        -- Numeric revisions should run 0..n; each missing number is a revision (and
+        -- possibly an award change) absent from the data.
+        coalesce((max(revision_seq) + 1) - count(distinct revision_seq), 0) as revision_gap_count,
         min(start_date)                                                as start_date,
         min(approval_date)                                             as first_approval_date,
         max(approval_date)                                             as last_approval_date,
@@ -144,6 +147,8 @@ select
                  or b.contract_type = 'COMPTROLLER-OTHER'
                  or b.description ~* 'REQUIREMENT', false) as award_is_ceiling,
     a.has_original,
+    a.revision_gap_count,
+    a.revision_gap_count = 0                             as has_complete_revision_history,
     a.original_award,
     a.cumulative_award,
     case when a.original_award > 0 then a.cumulative_award / a.original_award end
@@ -162,3 +167,4 @@ left join latest l       using (contract_number)
 left join current_term t using (contract_number);
 
 create unique index on dw.dim_contract (contract_number);
+create index on dw.dim_contract (vendor_key);
