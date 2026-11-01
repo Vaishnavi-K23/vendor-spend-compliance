@@ -139,7 +139,14 @@ SQL to be able to walk through live:
 - expiry buckets
 - the vendor deduplication logic
 
-### Phase 3b: Statistics notebook (Python)
+### Phase 3b: Statistics notebook (Python) — done ✅
+
+`notebooks/analysis.ipynb`, executed with outputs and 3 charts. Results:
+1. **Off-contract timing** (the department question was replaced, because DVs have no department). No December spike. January–February is higher by dollars (7.6% vs 5.0%) but *lower* by payment count (odds ratio 0.80). The rise is annual **insurance renewals**: 49% of off-contract insurance dollars fall in Jan–Feb, against 19% expected. Excluding insurance: 4.9% vs 4.3%. Contracts lapsing at Dec 31 explain little (OR 1.23).
+2. **Contract growth by method.** RFP contracts grow more often than bid contracts (55% vs 35%; median 1.16× vs 1.00×; Mann-Whitney p ≈ 1e-6, rank-biserial r = 0.24). Sole source vs competitive: no difference (p = 0.38).
+3. **Expiry exposure.** 83 standard-procurement contracts ending within 90 days run **$126M per 6 months**. The top 10 hold 68% of it, and 41 have rising spend.
+
+Original design:
 
 One notebook (`notebooks/analysis.ipynb`, pandas + scipy/statsmodels):
 - Does off-contract share differ significantly across departments/vendor groups? (chi-square test, with effect size, not just the p-value)
@@ -148,7 +155,11 @@ One notebook (`notebooks/analysis.ipynb`, pandas + scipy/statsmodels):
 
 Results are stated in plain language in the README, with caveats (observational data, not causal).
 
-### Phase 4: Validate the exception rules (no planted answers, so check by hand)
+### Phase 4: Validate the exception rules (no planted answers, so check by hand) — set up, review in progress
+
+Built: `validation/review_workbook.xlsx` (7 sheets, 245 rows with evidence pre-filled), `python -m src.validation.score_review` (precision and miss rate with 95% Wilson intervals → `validation/results.md`), and the how-to in `validation/README.md`. Samples are deterministic.
+
+**Your part:** fill in verdict / reason / notes. The verdicts must be your own judgment, because this is the interview story. Priority order: `off_contract_top_payees` (insurance brokers), `duplicates`, `over_award` (grants paid beyond award), `paid_after_end`. Then rescore, adjust rules where precision is low, and record the changes.
 
 - For each rule, hand-review a random 30–50 flagged payments and record precision ("41 of 50 were real issues; the 9 false positives were…").
 - Review a sample of unflagged payments too, to estimate what the rules miss.

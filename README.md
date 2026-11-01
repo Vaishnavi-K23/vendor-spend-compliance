@@ -38,6 +38,9 @@ _To be written from the marts._
 | `src/load/` | land raw CSVs in Postgres, build staging |
 | `src/model/` | build the dimensional model (schema `dw`) |
 | `src/dq/` | run data-quality checks in `sql/tests/` |
+| `src/validation/` | draw review samples and score the hand review |
+| `notebooks/` | statistics notebook (`analysis.ipynb`) |
+| `validation/` | hand-review workbook and results |
 | `sql/` | staging, marts, tests |
 | `extract/` | LLM extraction and evaluation |
 | `powerbi/` | report file and page specs |
@@ -59,7 +62,12 @@ python -m src.ingest.download_pdfs --n 200
 python -m src.load.load_raw               # raw.* and stg.*
 python -m src.model.build_model           # dw.* star schema
 python -m src.dq.run_checks
+
+python -m src.validation.build_review    # review workbook (once)
+python -m src.validation.score_review    # after reviewing
 ```
+
+The statistics notebook is `notebooks/analysis.ipynb`; run it after `build_model`.
 
 ## With production data
 
