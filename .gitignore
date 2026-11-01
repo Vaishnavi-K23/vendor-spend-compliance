@@ -1,0 +1,7 @@
+# Raw data is rebuilt by src/ingest; only manifests are committed
+data/raw/
+.env
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/

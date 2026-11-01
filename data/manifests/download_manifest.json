@@ -1,0 +1,20 @@
+{
+  "as_of_date": "2026-10-31",
+  "source": "https://data.cityofchicago.org/resource",
+  "tables": {
+    "contracts": {
+      "dataset_id": "rsxa-ify5",
+      "file": "contracts.csv",
+      "rows": 186011,
+      "sha256": "626407f8584f2e6e098337f06b234270e5886b842043aef2e0c547935031603f",
+      "downloaded_at": "2026-10-31T17:24:34-07:00"
+    },
+    "payments": {
+      "dataset_id": "s4vu-giwb",
+      "file": "payments.csv",
+      "rows": 477811,
+      "sha256": "188ec0cf5ca40851fbeae024fa5cf392e9baf5679972bafa831ec781e588a3d0",
+      "downloaded_at": "2026-10-31T17:24:34-07:00"
+    }
+  }
+}

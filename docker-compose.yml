@@ -1,0 +1,13 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: vendor
+      POSTGRES_PASSWORD: vendor
+      POSTGRES_DB: vendor
+    ports:
+      - "5433:5432"   # 5433 so it won't clash with a local Postgres install
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+volumes:
+  pgdata:
