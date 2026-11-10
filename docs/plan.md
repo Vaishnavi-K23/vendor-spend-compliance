@@ -196,6 +196,11 @@ The README carries screenshots and a 2-minute walkthrough video (OBS). The `.pbi
 
 ### Phase 6: LLM extraction and evaluation (local model, $0)
 
+**Status (2026-11-10): first full pass done.** 220 PDFs (24 dev, 196 test). Summary fields 85–99% on the
+held-out test set; `high` evidence grade 97% accurate. Body fields hand-labeled on 59 documents:
+precision 60–89%, but recall on not-to-exceed and payment terms is 23–25% because keyword selection
+misses the passages (v5). Details: `docs/llm-prompt-log.md`.
+
 Why it belongs in the analysis:
 - Renewal options, extension rights and not-to-exceed language exist only in the PDFs. Extracting them makes the expiry-risk view better.
 - When the PDF and the portal disagree on amount or dates, that disagreement is a finding of its own.
